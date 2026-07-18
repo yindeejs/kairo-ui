@@ -82,12 +82,21 @@ export interface SelectContentProps extends SelectPopupProps {
   side?: SelectPositionerProps['side'];
   /** How to align the popup relative to `side`. */
   align?: SelectPositionerProps['align'];
-  /** Distance in pixels between the trigger and the popup. @default 4 */
+  /** Distance in pixels between the trigger and the popup. @default 8 */
   sideOffset?: SelectPositionerProps['sideOffset'];
   /**
    * Whether the popup overlaps the trigger so the selected item's text lines
    * up with the trigger's value text (Base UI's special select positioning
-   * behavior). @default true
+   * behavior).
+   *
+   * Defaults to `false`, unlike Base UI — Kairo renders the popup as a panel
+   * sitting below (or above, when flipped) the trigger and pointing at it
+   * with an arrow, which the overlap mode contradicts: it covers the trigger
+   * and shifts the panel vertically by whichever item happens to be selected,
+   * so the popup reads as detached from the control that opened it. Pass
+   * `true` to opt back into the native-select-like overlap.
+   *
+   * @default false
    */
   alignItemWithTrigger?: SelectPositionerProps['alignItemWithTrigger'];
 }
@@ -106,7 +115,15 @@ export interface SelectContentProps extends SelectPopupProps {
  * reach it. Pass `lang` explicitly to override.
  */
 export const SelectContent = forwardRef<HTMLDivElement, SelectContentProps>(function SelectContent(
-  { className, children, side, align, sideOffset = 4, alignItemWithTrigger, ...props },
+  {
+    className,
+    children,
+    side,
+    align = 'start',
+    sideOffset = 8,
+    alignItemWithTrigger = false,
+    ...props
+  },
   ref,
 ) {
   const locale = useKairoLocale();
@@ -118,6 +135,9 @@ export const SelectContent = forwardRef<HTMLDivElement, SelectContentProps>(func
         sideOffset={sideOffset}
         alignItemWithTrigger={alignItemWithTrigger}
       >
+        <BaseSelect.Arrow className="kairo-select-arrow">
+          <ArrowIcon />
+        </BaseSelect.Arrow>
         <BaseSelect.Popup
           ref={ref}
           lang={locale}
@@ -235,6 +255,24 @@ function ChevronIcon() {
       aria-hidden="true"
     >
       <path d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}
+
+/**
+ * The arrow tying the popup back to its trigger. Only the two slanted edges
+ * are stroked — stroking the base as well would draw a line across the seam
+ * where the arrow meets the popup's own border.
+ *
+ * Fill and stroke are left to CSS rather than set as presentation attributes:
+ * `var()` is only substituted in CSS declarations, so `fill="var(--x)"` on the
+ * element would not resolve and the arrow would paint black.
+ */
+function ArrowIcon() {
+  return (
+    <svg viewBox="0 0 12 6" width={12} height={6} aria-hidden="true">
+      <path className="kairo-select-arrow-fill" d="M6 0 12 6H0z" />
+      <path className="kairo-select-arrow-edge" d="M0 6 6 0l6 6" />
     </svg>
   );
 }
