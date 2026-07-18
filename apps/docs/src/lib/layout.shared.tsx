@@ -35,5 +35,8 @@ export function baseOptions(locale: Locale = 'en'): BaseLayoutProps {
     },
     links: navLinks(locale),
     githubUrl: GITHUB_REPO_URL,
+    // Search moved into the sidebar banner (see `SidebarBanner`) — the
+    // header's own trigger is turned off so it isn't offered twice.
+    searchToggle: { enabled: false },
   };
 }

@@ -64,3 +64,29 @@ html > body[data-scroll-locked] {
   margin-right: 0px !important;
   --removed-body-scroll-bar-size: 0px !important;
 }
+
+/*
+ * Layout geometry: the notebook shell reserves two flexible gutter columns
+ * outside the sidebar/main/toc grid tracks, sized from whatever's left after
+ * `--fd-layout-width` (default 97rem/1552px) is subtracted. Past that
+ * viewport width they stop being 0 and grow into large dead margins on both
+ * sides — sidebar, header and TOC all float away from the viewport edges.
+ * Better-auth's docs don't reserve that margin, so raise the cap past any
+ * realistic viewport width to keep the gutters collapsed and the chrome
+ * flush to the edges.
+ */
+#nd-notebook-layout {
+  --fd-layout-width: 100vw;
+}
+
+/*
+ * `#nd-page`'s own `xl:pt-14` (56px) top padding was tuned for a header that
+ * used to feel emptier with the search box in it; now that the header is a
+ * tight single row, match its bottom border more closely so the title
+ * doesn't float below a wide gap.
+ */
+@media (min-width: 80rem) {
+  #nd-page {
+    padding-top: 2rem;
+  }
+}

@@ -18,7 +18,7 @@ import {
 } from 'fumadocs-ui/layouts/notebook/page';
 import browserCollections from 'collections/browser';
 import { getMDXComponents } from '@/components/mdx';
-import { VersionBadge } from '@/components/version-badge';
+import { SidebarBanner } from '@/components/sidebar-banner';
 import { baseOptions, GITHUB_REPO_URL } from '@/lib/layout.shared';
 import type { Locale } from '@/lib/i18n';
 
@@ -99,12 +99,13 @@ export function DocsPageBody({
 }) {
   return (
     // Notebook (rather than the plain docs layout): its full-width header
-    // carrying brand + nav + search, with the sidebar starting beneath it and
-    // flush to the viewport edge, is the shell this site's design targets.
+    // carrying brand + nav, with the sidebar (banner: version + search)
+    // starting beneath it and flush to the viewport edge, is the shell this
+    // site's design targets.
     <NotebookLayout
       {...baseOptions(locale)}
       tree={pageTree}
-      sidebar={{ collapsible: true, banner: <VersionBadge locale={locale} /> }}
+      sidebar={{ collapsible: true, banner: <SidebarBanner locale={locale} /> }}
     >
       <Suspense>
         {docsClientLoader.useContent(path, {
