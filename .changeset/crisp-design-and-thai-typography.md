@@ -6,7 +6,7 @@ Sharper, border-led visual language and correct Thai typography.
 
 **Design**
 
-- Radius scale is now explicit instead of derived: `--kairo-radius: 6px` with `--kairo-radius-sm: 4px`, `--kairo-radius-md: var(--kairo-radius)`, `--kairo-radius-lg: 8px`, plus a new `--kairo-radius-full` for pill shapes. Corners are noticeably crisper while staying soft.
+- Corners are square. `--kairo-radius`, `--kairo-radius-sm`, `--kairo-radius-md` and `--kairo-radius-lg` are all `0px`, and the scale is now explicit instead of derived from a `calc()` chain. Shape is carried by borders and the focus ring rather than by rounding. Every tier is still its own token, so rounding can be reintroduced in one line: `:root { --kairo-radius: 8px; --kairo-radius-sm: 6px; --kairo-radius-lg: 10px }`. The new `--kairo-radius-full` is used by Avatar, Spinner and the Switch, which are round by function and unaffected.
 - New structural tokens: `--kairo-border-width`, `--kairo-ring-width`, `--kairo-ring-offset`. Focus rings are now uniform — previously offsets varied between 1px, 2px and -2px.
 - Elevation is border-led. Dialog, Tooltip and the Select popup previously had no border at all; all five floating surfaces now carry one. Shadows were retightened and split into `--kairo-shadow-color` + `--kairo-shadow-strength` so dark mode can retune them — a black shadow is invisible on a dark surface, so dark elevation now reads through brighter border contrast.
 - The Tabs indicator is square; Switch, Avatar and Spinner stay round.

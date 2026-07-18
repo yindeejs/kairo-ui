@@ -52,12 +52,17 @@
   --kairo-input: oklch(0.922 0 0);
   --kairo-ring: oklch(0.708 0 0);
 
-  /* Radius — explicit scale (px on purpose: corner radius should not scale
-     with the root font size). Overriding --kairo-radius moves the `md` tier. */
-  --kairo-radius: 6px;
-  --kairo-radius-sm: 4px;
+  /* Radius — squared off. Shape is defined by borders and the focus ring
+     rather than corners, which is what gives the system its crisp, technical
+     read. Every tier is kept as its own token (rather than collapsing them)
+     so a consumer can re-introduce rounding with a one-line override:
+       :root { --kairo-radius: 8px; --kairo-radius-sm: 6px; --kairo-radius-lg: 10px }
+     `--kairo-radius-full` is deliberately untouched — Avatar, Spinner and the
+     Switch track/thumb are round by function, not by style. */
+  --kairo-radius: 0px;
+  --kairo-radius-sm: 0px;
   --kairo-radius-md: var(--kairo-radius);
-  --kairo-radius-lg: 8px;
+  --kairo-radius-lg: 0px;
   --kairo-radius-full: 9999px;
 
   /* Structural line weights */

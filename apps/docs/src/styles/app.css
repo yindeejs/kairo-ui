@@ -9,8 +9,38 @@
 @import 'fumadocs-ui/css/neutral.css';
 @import 'fumadocs-ui/css/preset.css';
 
+/*
+ * Square off Fumadocs' chrome to match Kairo's own squared tokens.
+ *
+ * fumadocs-ui exposes no radius variable — its corners are Tailwind utilities
+ * (`rounded-md`, `rounded-lg`, …). They ARE compiled by our Tailwind build,
+ * though: `fumadocs-ui/css/generated/*.css` are `@source inline("…")` class
+ * manifests rather than pre-built CSS, so overriding the scale here reaches
+ * them. `rounded-full` compiles to `calc(infinity * 1px)` and does not read
+ * this scale, so genuinely-round chrome survives untouched.
+ *
+ * Do NOT replace this with `* { border-radius: 0 }` — that would also flatten
+ * Avatar, Spinner and the Switch, which are round by function.
+ */
+@theme {
+  --radius-xs: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+  --radius-4xl: 0px;
+}
+
 html {
   scrollbar-gutter: stable;
+}
+
+/* The one corner Fumadocs hardcodes (5px on the scrollbar thumb in its
+   base.css), which the scale override above cannot reach. */
+::-webkit-scrollbar-thumb {
+  border-radius: 0;
 }
 
 html > body[data-scroll-locked] {
