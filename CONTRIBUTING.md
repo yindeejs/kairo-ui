@@ -26,7 +26,7 @@ pnpm build       # build all packages
 pnpm typecheck   # type-check all packages
 pnpm test        # run tests
 pnpm lint        # lint all packages
-pnpm format      # format everything with Prettier
+pnpm format      # format everything with oxfmt
 ```
 
 To work on the docs site while developing a component:
@@ -85,7 +85,10 @@ fastest way to get this right.
 ## Coding standards
 
 - **TypeScript** everywhere — avoid `any`; prefer precise prop types.
-- **Prettier** formats the codebase — run `pnpm format` before committing.
+- **oxfmt** (`.oxfmtrc.jsonc`) formats the codebase — run `pnpm format` before
+  committing, and `pnpm format:check` to see what CI will say. Markdown, MDX
+  and `packages/theme/src/tokens.generated.ts` are deliberately excluded; the
+  config explains why for each.
 - **oxlint** (`.oxlintrc.json`) — run `pnpm lint` and fix anything it flags.
   It is a single repo-wide pass, not per-package, so run it from the root.
 

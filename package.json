@@ -23,15 +23,16 @@
     "typecheck": "turbo run typecheck",
     "lint": "oxlint",
     "check-exports": "turbo run check-exports",
-    "format": "prettier --write .",
+    "format": "oxfmt",
     "changeset": "changeset",
-    "release": "pnpm build && changeset publish"
+    "release": "pnpm build && changeset publish",
+    "format:check": "oxfmt --check"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.18.5",
     "@changesets/cli": "2.31.1",
+    "oxfmt": "0.59.0",
     "oxlint": "1.74.0",
-    "prettier": "3.9.5",
     "publint": "0.3.21",
     "turbo": "2.10.5"
   },

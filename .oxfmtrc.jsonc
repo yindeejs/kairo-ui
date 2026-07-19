@@ -1,0 +1,56 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+
+  // The only option here that differs from oxfmt's own default. `printWidth`
+  // (100), `semi` (true), `trailingComma` ("all") and `endOfLine` ("lf")
+  // already match what .prettierrc asked for and what .gitattributes enforces,
+  // so restating them would only create a second place for them to drift.
+  "singleQuote": true,
+
+  // oxfmt defaults this to TRUE. Left on, the first run reorders the fields of
+  // all 18 package.json files in the workspace — including the 30-entry
+  // `exports` map in packages/react, which is hand-synced against
+  // tsdown.config.ts by scripts/check-exports-sync.mjs. That turns a
+  // whitespace-only commit into one that looks like it carries meaning.
+  "sortPackageJson": false,
+
+  "ignorePatterns": [
+    // 350+ KB, machine-written, and formatted as YAML via oxfmt's bundled
+    // Prettier. .prettierignore used to list it and is deleted in this same
+    // commit; checked, and oxfmt leaves it alone even without this entry, so
+    // this is insurance rather than a live fix — pnpm owns the file's layout
+    // and a future version of it need not keep agreeing with a formatter.
+    "pnpm-lock.yaml",
+
+    // Non-negotiable: MDX carries shipped content, not just source. Every
+    // component page embeds its copy-paste sample as a template literal —
+    // `<ComponentPreview code={`…`}>` — and the formatter strips the leading
+    // indentation inside it, flattening `return (` / `<Button` / attributes to
+    // column 0. That string is what the copy button copies, and it flows on
+    // into /raw/*.md and llms-full.txt. `embeddedLanguageFormatting: "off"`
+    // does not prevent it, oxfmt has no whole-file ignore pragma, and CI only
+    // counts prerendered files — so the damage would ship green.
+    "*.mdx",
+
+    // Markdown is excluded for a weaker but real reason: with
+    // `proseWrap: "preserve"` there is almost nothing left the formatter does
+    // well here, and two things it does badly. It miscounts the display width
+    // of the ⚡ emoji in the README component tables, producing output *less*
+    // aligned than the hand-written source, and it dedents ordered-list
+    // continuation lines in PUBLISHING.md. The tradeoff accepted here is that
+    // Markdown formatting stays unenforced — which has been true for the whole
+    // life of the project and has cost nothing.
+    //
+    // Bonus: this also covers .changeset/*.md, which `changeset version`
+    // consumes and which a release PR would otherwise conflict over.
+    "*.md",
+
+    // Generated from css/tokens.css and byte-compared against a fresh render
+    // by test/tokens.test.ts. The formatter collapses a union that the
+    // generator always emits multi-line, so formatting it is a permanent
+    // regenerate -> reformat -> red-test loop rather than a one-time fixup.
+    // Excluded from the FORMATTER only: it is public API that consumers
+    // import, so oxlint still lints it. Do not merge these two ignore lists.
+    "packages/theme/src/tokens.generated.ts"
+  ]
+}
