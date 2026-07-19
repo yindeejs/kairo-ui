@@ -1,0 +1,14 @@
+# Commits that changed formatting only, and should not show up as the author
+# of a line in `git blame`.
+#
+# GitHub reads this file automatically. Locally it is opt-in, once per clone:
+#
+#     git config blame.ignoreRevsFile .git-blame-ignore-revs
+#
+# Only add a commit here if it is PURELY mechanical — no behaviour, no renames.
+# Full 40-character SHAs; abbreviated ones are silently ignored by git.
+
+# style: format repo with oxfmt
+# The repo's first repo-wide formatting pass. Formatting had never been
+# enforced (no CI gate, no hook), so this touched 45 files at once.
+60a27dc3e99ade006dbcf3fd729f4f57afd74ed2
