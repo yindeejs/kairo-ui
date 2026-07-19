@@ -5,14 +5,14 @@
   "type": "module",
   "license": "MIT",
   "author": "Kairo Contributors",
-  "homepage": "https://github.com/qiukelab/Kairo-UI#readme",
+  "homepage": "https://github.com/qiukelab/kairo-ui#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/qiukelab/Kairo-UI.git",
+    "url": "git+https://github.com/qiukelab/kairo-ui.git",
     "directory": "packages/theme"
   },
   "bugs": {
-    "url": "https://github.com/qiukelab/Kairo-UI/issues"
+    "url": "https://github.com/qiukelab/kairo-ui/issues"
   },
   "keywords": [
     "css",
@@ -46,7 +46,8 @@
     "generate:tokens": "node scripts/generate-tokens.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "check-exports": "publint && attw --pack . --profile esm-only --exclude-entrypoints ./styles.css ./tokens.css"
   },
   "devDependencies": {
     "@kairo-ui/tsconfig": "workspace:*",

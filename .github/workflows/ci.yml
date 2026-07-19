@@ -74,6 +74,21 @@ jobs:
             || { echo "::error::raw markdown still contains frontmatter"; exit 1; }
           echo "docs static output OK ($html pages, $raw raw markdown files)"
 
+      # publint and attw both inspect the *built* `dist/` output of the
+      # publishable packages, so this must come after `pnpm build`. Kairo's
+      # `.` export is ESM-only by design (no `require`/`default` condition)
+      # — that is intentional, not a bug to fix, so both tools are configured
+      # to accept it instead of being silenced outright: attw's `esm-only`
+      # profile ignores exactly the node10 and node16-from-CJS findings that
+      # follow from that choice, and no broader ignore flags are used.
+      # `@kairo-ui/theme`'s `./styles.css`/`./tokens.css` exports are pure
+      # CSS with no JS or type content, which attw's type-resolution model
+      # cannot represent (not a package defect), so those two entrypoints
+      # are excluded from its scan. See each package's `check-exports`
+      # script for the exact flags.
+      - name: Verify package exports
+        run: pnpm check-exports
+
       - name: Typecheck
         run: pnpm typecheck
 
