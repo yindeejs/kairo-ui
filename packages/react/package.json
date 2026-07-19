@@ -158,7 +158,6 @@
     "dev": "tsdown --watch",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
-    "lint": "eslint .",
     "check-exports": "node scripts/check-use-client.mjs && node scripts/check-exports-sync.mjs && publint && attw --pack . --profile esm-only"
   },
   "peerDependencies": {

@@ -46,7 +46,6 @@
     "generate:tokens": "node scripts/generate-tokens.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "lint": "eslint .",
     "check-exports": "publint && attw --pack . --profile esm-only --exclude-entrypoints ./styles.css ./tokens.css"
   },
   "devDependencies": {

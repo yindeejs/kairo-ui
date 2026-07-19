@@ -1,0 +1,73 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+
+  // `plugins` REPLACES oxlint's default set (eslint, typescript, unicorn,
+  // oxc) rather than merging with it, so the defaults are restated here
+  // alongside `react`. Writing just `["react"]` silently disables the other
+  // four AND still exits 0, which looks exactly like a successful migration.
+  //
+  // Two decisions carried over from the ESLint config this replaces, both of
+  // which no longer have a natural home in the config itself:
+  //
+  //   - No type-aware linting. The old setup deliberately used the
+  //     non-type-checked `typescript-eslint` presets: enough correctness
+  //     coverage for a library this size without cross-package
+  //     `parserOptions.project` wiring or per-file type info. oxlint has no
+  //     type-aware rules at all, so that tradeoff is now structural rather
+  //     than chosen. Type-level correctness belongs to `pnpm typecheck`.
+  //   - No React Compiler diagnostics. `eslint-plugin-react-hooks` v7 folded
+  //     purity/immutability/static-component rules into its `recommended`
+  //     preset, aimed at apps opting into the compiler. Kairo doesn't use it,
+  //     and those rules false-positived against Base UI's ref- and
+  //     effect-heavy wrapper patterns, so only the two battle-tested
+  //     Rules-of-Hooks checks were ever enabled. oxlint's `react` plugin
+  //     bundles react-hooks and ships no compiler diagnostics, so there is
+  //     nothing here to opt out of — but the reasoning is worth keeping,
+  //     because "why not enable the compiler rules?" will be asked again.
+  //     The long form lives in CONTRIBUTING.md.
+  //
+  // `unicorn` is on because it is an oxlint default. ESLint never ran it, so
+  // treat anything it reports as a genuinely new opinion to triage, not a
+  // regression.
+  "plugins": ["eslint", "typescript", "unicorn", "oxc", "react"],
+
+  "categories": { "correctness": "error" },
+
+  // Browser + Node globals cover both the UI packages (window/document) and
+  // Node-context config/tooling files (process, module) in one pass.
+  "env": { "browser": true, "node": true, "es2024": true },
+
+  "settings": {
+    // Hardcoded rather than `detect`: avoids `react/package.json` resolution
+    // depending on which directory the linter is invoked from.
+    "react": { "version": "19.2" }
+  },
+
+  "rules": {
+    "typescript/no-explicit-any": "error",
+
+    // Every component re-exports a Base UI (or native DOM) prop type under a
+    // Kairo-branded name for docs/DX, e.g.
+    // `interface ButtonProps extends ButtonHTMLAttributes<...> {}` — an
+    // intentional single-extends alias, not an accidental empty `{}` type.
+    "typescript/no-empty-object-type": ["error", { "allowInterfaces": "with-single-extends" }],
+
+    "eslint/no-unused-vars": "error",
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "warn"
+  },
+
+  "overrides": [
+    {
+      // `vitest-axe.d.ts` mirrors upstream Vitest ambient module-augmentation
+      // signatures: `Assertion<T = any>` needs the same `any` default and the
+      // same type-parameter arity as the interface it merges with, even though
+      // neither is referenced in the (intentionally empty) augmented body.
+      "files": ["**/*.d.ts"],
+      "rules": {
+        "typescript/no-explicit-any": "off",
+        "eslint/no-unused-vars": "off"
+      }
+    }
+  ]
+}

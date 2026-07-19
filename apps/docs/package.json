@@ -7,8 +7,7 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
-    "typecheck": "fumadocs-mdx && tsc --noEmit",
-    "lint": "eslint ."
+    "typecheck": "fumadocs-mdx && tsc --noEmit"
   },
   "dependencies": {
     "@kairo-ui/motion-react": "workspace:*",

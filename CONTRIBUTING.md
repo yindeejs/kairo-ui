@@ -86,8 +86,29 @@ fastest way to get this right.
 
 - **TypeScript** everywhere — avoid `any`; prefer precise prop types.
 - **Prettier** formats the codebase — run `pnpm format` before committing.
-- **ESLint** (flat config, typescript-eslint + react-hooks) — run `pnpm lint`
-  and fix anything it flags.
+- **oxlint** (`.oxlintrc.json`) — run `pnpm lint` and fix anything it flags.
+  It is a single repo-wide pass, not per-package, so run it from the root.
+
+### Two linting decisions worth knowing before you propose changing them
+
+Both used to be explained in the ESLint config that `.oxlintrc.json` replaced.
+Neither has a natural home in the new config, because oxlint doesn't implement
+the thing being opted out of — so they are recorded here instead.
+
+- **No type-aware linting.** The old setup deliberately used the
+  non-type-checked `typescript-eslint` presets: enough correctness coverage
+  for a library this size without wiring `parserOptions.project` across
+  packages or paying for per-file type information. oxlint has no type-aware
+  rules at all, so this is now structural. Type-level correctness is
+  `pnpm typecheck`'s job, and that is where it should stay.
+- **No React Compiler diagnostics.** `eslint-plugin-react-hooks` v7 folded
+  purity/immutability/static-component rules into its `recommended` preset,
+  aimed at apps opting into the compiler. Kairo doesn't use it, and those
+  rules produced noisy false positives against Base UI's ref- and effect-heavy
+  wrapper patterns, so only the two battle-tested Rules-of-Hooks checks were
+  ever enabled. oxlint's `react` plugin bundles react-hooks and ships no
+  compiler diagnostics, so there is currently nothing to opt out of — but if
+  that changes, this is the reasoning.
 
 ## Test infra note
 
