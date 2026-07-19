@@ -11,6 +11,7 @@ import type {
   ComboboxClearProps,
   ComboboxPositionerProps,
   ComboboxPopupProps,
+  ComboboxPortalProps,
   ComboboxListProps,
   ComboboxItemProps,
   ComboboxEmptyProps,
@@ -185,6 +186,13 @@ export interface ComboboxContentProps extends ComboboxPopupProps {
   align?: ComboboxPositionerProps['align'];
   /** Distance in pixels between the control and the popup. @default 8 */
   sideOffset?: ComboboxPositionerProps['sideOffset'];
+  /**
+   * A parent element to render the popup's portal into, instead of the
+   * default `document.body`. Needed to portal into a shadow DOM, an iframe,
+   * or the currently active fullscreen element, where `document.body` isn't
+   * reachable or isn't the right paint target.
+   */
+  container?: ComboboxPortalProps['container'];
 }
 
 /**
@@ -206,12 +214,12 @@ export interface ComboboxContentProps extends ComboboxPopupProps {
  */
 export const ComboboxContent = forwardRef<HTMLDivElement, ComboboxContentProps>(
   function ComboboxContent(
-    { className, children, side, align = 'start', sideOffset = 8, ...props },
+    { className, children, side, align = 'start', sideOffset = 8, container, ...props },
     ref,
   ) {
     const locale = useKairoLocale();
     return (
-      <BaseCombobox.Portal>
+      <BaseCombobox.Portal container={container}>
         <BaseCombobox.Positioner side={side} align={align} sideOffset={sideOffset}>
           <BaseCombobox.Arrow className="kairo-combobox-arrow">
             <ArrowIcon />

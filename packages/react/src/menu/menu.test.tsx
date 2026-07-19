@@ -271,4 +271,20 @@ describe('Menu', () => {
     const menu = await screen.findByRole('menu');
     expect(menu).not.toHaveAttribute('lang');
   });
+
+  it('portals the popup into a custom container element', async () => {
+    const portalTarget = document.createElement('div');
+    document.body.appendChild(portalTarget);
+    render(
+      <Menu open>
+        <MenuTrigger>Options</MenuTrigger>
+        <MenuContent container={portalTarget}>
+          <MenuItem>Copy</MenuItem>
+        </MenuContent>
+      </Menu>,
+    );
+    const menu = await screen.findByRole('menu');
+    expect(portalTarget.contains(menu)).toBe(true);
+    document.body.removeChild(portalTarget);
+  });
 });

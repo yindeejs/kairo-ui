@@ -184,4 +184,21 @@ describe('ContextMenu', () => {
     const menu = await screen.findByRole('menu');
     expect(menu).not.toHaveAttribute('lang');
   });
+
+  it('portals the popup into a custom container element', async () => {
+    const portalTarget = document.createElement('div');
+    document.body.appendChild(portalTarget);
+    render(
+      <ContextMenu>
+        <ContextMenuTrigger data-testid="trigger">Right-click this area</ContextMenuTrigger>
+        <ContextMenuContent container={portalTarget}>
+          <ContextMenuItem>Copy</ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>,
+    );
+    fireEvent.contextMenu(screen.getByTestId('trigger'));
+    const menu = await screen.findByRole('menu');
+    expect(portalTarget.contains(menu)).toBe(true);
+    document.body.removeChild(portalTarget);
+  });
 });

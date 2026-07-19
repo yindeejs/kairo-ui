@@ -8,6 +8,7 @@ import type {
   MenuTriggerProps,
   MenuPositionerProps,
   MenuPopupProps,
+  MenuPortalProps,
   MenuItemProps,
   MenuCheckboxItemProps,
   MenuRadioGroupProps,
@@ -92,6 +93,13 @@ export interface MenuContentProps extends MenuPopupProps {
   align?: MenuPositionerProps['align'];
   /** Distance in pixels between the trigger and the popup. @default 8 */
   sideOffset?: MenuPositionerProps['sideOffset'];
+  /**
+   * A parent element to render the popup's portal into, instead of the
+   * default `document.body`. Needed to portal into a shadow DOM, an iframe,
+   * or the currently active fullscreen element, where `document.body` isn't
+   * reachable or isn't the right paint target.
+   */
+  container?: MenuPortalProps['container'];
 }
 
 /**
@@ -110,12 +118,12 @@ export interface MenuContentProps extends MenuPopupProps {
  * reach it. Pass `lang` explicitly to override.
  */
 export const MenuContent = forwardRef<HTMLDivElement, MenuContentProps>(function MenuContent(
-  { className, children, side, align = 'start', sideOffset = 8, ...props },
+  { className, children, side, align = 'start', sideOffset = 8, container, ...props },
   ref,
 ) {
   const locale = useKairoLocale();
   return (
-    <BaseMenu.Portal>
+    <BaseMenu.Portal container={container}>
       <BaseMenu.Positioner side={side} align={align} sideOffset={sideOffset}>
         <BaseMenu.Arrow className="kairo-menu-arrow">
           <ArrowIcon />

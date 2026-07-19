@@ -297,4 +297,29 @@ describe('Combobox', () => {
     // fragment, not a full page with header/main/nav landmarks.
     expect(await axe(baseElement, { rules: { region: { enabled: false } } })).toHaveNoViolations();
   });
+
+  it('portals the popup into a custom container element', async () => {
+    const portalTarget = document.createElement('div');
+    document.body.appendChild(portalTarget);
+    render(
+      <Combobox items={fruits}>
+        <ComboboxControl>
+          <ComboboxInput aria-label="Fruit" />
+        </ComboboxControl>
+        <ComboboxContent container={portalTarget}>
+          <ComboboxList>
+            {(item: Fruit) => (
+              <ComboboxItem key={item.value} value={item}>
+                {item.label}
+              </ComboboxItem>
+            )}
+          </ComboboxList>
+        </ComboboxContent>
+      </Combobox>,
+    );
+    const input = screen.getByRole('combobox', { name: 'Fruit' });
+    const listbox = await openWithArrowDown(input);
+    expect(portalTarget.contains(listbox)).toBe(true);
+    document.body.removeChild(portalTarget);
+  });
 });

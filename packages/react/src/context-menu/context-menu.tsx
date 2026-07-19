@@ -7,6 +7,7 @@ import type {
   ContextMenuTriggerProps,
   ContextMenuPositionerProps,
   ContextMenuPopupProps,
+  ContextMenuPortalProps,
   ContextMenuItemProps,
   ContextMenuGroupProps,
   ContextMenuGroupLabelProps,
@@ -105,6 +106,13 @@ export interface ContextMenuContentProps extends ContextMenuPopupProps {
    * override that default.
    */
   sideOffset?: ContextMenuPositionerProps['sideOffset'];
+  /**
+   * A parent element to render the popup's portal into, instead of the
+   * default `document.body`. Needed to portal into a shadow DOM, an iframe,
+   * or the currently active fullscreen element, where `document.body` isn't
+   * reachable or isn't the right paint target.
+   */
+  container?: ContextMenuPortalProps['container'];
 }
 
 /**
@@ -118,10 +126,13 @@ export interface ContextMenuContentProps extends ContextMenuPopupProps {
  * reach it. Pass `lang` explicitly to override.
  */
 export const ContextMenuContent = forwardRef<HTMLDivElement, ContextMenuContentProps>(
-  function ContextMenuContent({ className, children, side, align, sideOffset, ...props }, ref) {
+  function ContextMenuContent(
+    { className, children, side, align, sideOffset, container, ...props },
+    ref,
+  ) {
     const locale = useKairoLocale();
     return (
-      <BaseContextMenu.Portal>
+      <BaseContextMenu.Portal container={container}>
         <BaseContextMenu.Positioner side={side} align={align} sideOffset={sideOffset}>
           <BaseContextMenu.Popup
             ref={ref}
