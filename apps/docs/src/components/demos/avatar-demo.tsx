@@ -2,6 +2,21 @@
 
 import { useState } from 'react';
 import { Avatar } from '@kairo-ui/react';
+import type { Locale } from '@/lib/i18n';
+import { useDemoCopy } from './use-demo-locale';
+
+interface AvatarCopy {
+  simulateBroken: string;
+}
+
+const COPY: Record<Locale, AvatarCopy> = {
+  en: {
+    simulateBroken: 'Simulate a broken image URL (falls back to initials)',
+  },
+  th: {
+    simulateBroken: 'จำลอง URL รูปภาพที่เสีย (ตกกลับไปแสดงอักษรย่อ)',
+  },
+};
 
 /**
  * Interactive demo for the Avatar docs page: toggling a broken image URL on
@@ -10,6 +25,7 @@ import { Avatar } from '@kairo-ui/react';
  */
 export function AvatarDemo() {
   const [broken, setBroken] = useState(false);
+  const t = useDemoCopy(COPY);
 
   return (
     <div className="flex flex-col items-center gap-4">
@@ -29,7 +45,7 @@ export function AvatarDemo() {
           checked={broken}
           onChange={(event) => setBroken(event.target.checked)}
         />
-        Simulate a broken image URL (falls back to initials)
+        {t.simulateBroken}
       </label>
     </div>
   );

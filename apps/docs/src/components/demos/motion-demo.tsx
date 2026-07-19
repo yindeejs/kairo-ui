@@ -3,6 +3,24 @@
 import { useState } from 'react';
 import { Button } from '@kairo-ui/react';
 import { AnimatedNumber, Reveal } from '@kairo-ui/motion-react';
+import type { Locale } from '@/lib/i18n';
+import { useDemoCopy } from './use-demo-locale';
+
+interface MotionCopy {
+  addButton: string;
+  revealText: string;
+}
+
+const COPY: Record<Locale, MotionCopy> = {
+  en: {
+    addButton: 'Add 137',
+    revealText: 'I animate in the first time I scroll into view.',
+  },
+  th: {
+    addButton: 'เพิ่ม 137',
+    revealText: 'ฉันจะเคลื่อนไหวเข้ามาในครั้งแรกที่เลื่อนเข้ามาในมุมมอง',
+  },
+};
 
 /**
  * Interactive demo for the Motion docs page: a button that bumps a number
@@ -11,13 +29,14 @@ import { AnimatedNumber, Reveal } from '@kairo-ui/motion-react';
  */
 export function MotionDemo() {
   const [value, setValue] = useState(1280);
+  const t = useDemoCopy(COPY);
 
   return (
     <div className="flex flex-col items-center gap-6">
       <div className="flex items-center gap-4">
         <AnimatedNumber value={value} className="text-3xl font-semibold tabular-nums" />
         <Button variant="outline" onClick={() => setValue((current) => current + 137)}>
-          Add 137
+          {t.addButton}
         </Button>
       </div>
 
@@ -26,7 +45,7 @@ export function MotionDemo() {
         className="rounded-md border p-4 text-sm"
         style={{ borderColor: 'var(--kairo-border)' }}
       >
-        I animate in the first time I scroll into view.
+        {t.revealText}
       </Reveal>
     </div>
   );

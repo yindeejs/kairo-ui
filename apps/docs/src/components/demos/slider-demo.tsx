@@ -10,6 +10,36 @@ import {
   SliderIndicator,
   SliderThumb,
 } from '@kairo-ui/react';
+import type { Locale } from '@/lib/i18n';
+import { useDemoCopy } from './use-demo-locale';
+
+interface SliderCopy {
+  brightness: string;
+  volumeControlled: string;
+  priceRange: string;
+  disabled: string;
+  minPrice: string;
+  maxPrice: string;
+}
+
+const COPY: Record<Locale, SliderCopy> = {
+  en: {
+    brightness: 'Brightness',
+    volumeControlled: 'Volume (controlled)',
+    priceRange: 'Price range',
+    disabled: 'Disabled',
+    minPrice: 'Minimum price',
+    maxPrice: 'Maximum price',
+  },
+  th: {
+    brightness: 'ความสว่าง',
+    volumeControlled: 'ระดับเสียง (ควบคุมด้วยสถานะ)',
+    priceRange: 'ช่วงราคา',
+    disabled: 'ปิดใช้งาน',
+    minPrice: 'ราคาต่ำสุด',
+    maxPrice: 'ราคาสูงสุด',
+  },
+};
 
 /**
  * Interactive demo for the Slider docs page: an uncontrolled slider with a
@@ -18,12 +48,13 @@ import {
  */
 export function SliderDemo() {
   const [volume, setVolume] = useState(40);
+  const t = useDemoCopy(COPY);
 
   return (
     <div className="flex w-full max-w-sm flex-col gap-8">
       <Slider defaultValue={30}>
         <div className="flex items-center justify-between">
-          <SliderLabel>Brightness</SliderLabel>
+          <SliderLabel>{t.brightness}</SliderLabel>
           <SliderValue />
         </div>
         <SliderControl>
@@ -44,7 +75,7 @@ export function SliderDemo() {
         onValueChange={(value) => setVolume(typeof value === 'number' ? value : value[0])}
       >
         <div className="flex items-center justify-between">
-          <SliderLabel>Volume (controlled)</SliderLabel>
+          <SliderLabel>{t.volumeControlled}</SliderLabel>
           <SliderValue />
         </div>
         <SliderControl>
@@ -57,21 +88,21 @@ export function SliderDemo() {
 
       <Slider defaultValue={[20, 80]}>
         <div className="flex items-center justify-between">
-          <SliderLabel>Price range</SliderLabel>
+          <SliderLabel>{t.priceRange}</SliderLabel>
           <SliderValue />
         </div>
         <SliderControl>
           <SliderTrack>
             <SliderIndicator />
-            <SliderThumb index={0} aria-label="Minimum price" />
-            <SliderThumb index={1} aria-label="Maximum price" />
+            <SliderThumb index={0} aria-label={t.minPrice} />
+            <SliderThumb index={1} aria-label={t.maxPrice} />
           </SliderTrack>
         </SliderControl>
       </Slider>
 
       <Slider defaultValue={60} disabled>
         <div className="flex items-center justify-between">
-          <SliderLabel>Disabled</SliderLabel>
+          <SliderLabel>{t.disabled}</SliderLabel>
           <SliderValue />
         </div>
         <SliderControl>
