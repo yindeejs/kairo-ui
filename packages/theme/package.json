@@ -36,12 +36,14 @@
       "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs"
     },
-    "./styles.css": "./css/index.css",
+    "./styles.css": "./dist/styles.css",
+    "./tokens.css": "./dist/tokens.css",
     "./css/*": "./css/*"
   },
   "scripts": {
-    "build": "tsdown",
+    "build": "tsdown && node scripts/build-css.mjs",
     "dev": "tsdown --watch",
+    "generate:tokens": "node scripts/generate-tokens.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "lint": "eslint ."

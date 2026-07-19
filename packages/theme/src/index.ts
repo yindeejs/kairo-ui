@@ -11,6 +11,17 @@
  *   - `setTheme({ preset, mode })` is a convenience wrapper over both.
  */
 
+export type {
+  KairoColorToken,
+  KairoMotionToken,
+  KairoRadiusToken,
+  KairoShadowToken,
+  KairoStructuralToken,
+  KairoToken,
+  KairoTypographyToken,
+} from './tokens.generated';
+export { KAIRO_TOKENS, token } from './tokens.generated';
+
 const THEME_ATTRIBUTE = 'data-kairo-theme';
 const DARK_CLASS = 'dark';
 const DEFAULT_PRESET = 'default';
@@ -24,11 +35,18 @@ export interface KairoThemePreset {
   swatch: string;
 }
 
-export const themes: readonly KairoThemePreset[] = [
+// `as const satisfies` (rather than an explicit `: readonly KairoThemePreset[]`
+// annotation) keeps each `id` a string *literal* so `KairoPresetId` below can
+// derive the real union instead of widening to `string`, while still
+// checking every entry against `KairoThemePreset`.
+export const themes = [
   { id: 'default', label: 'Black', swatch: 'oklch(0.205 0 0)' },
   { id: 'blue', label: 'Blue', swatch: 'oklch(0.58 0.196 259)' },
   { id: 'pink', label: 'Pink', swatch: 'oklch(0.58 0.2 355)' },
-];
+] as const satisfies readonly KairoThemePreset[];
+
+/** Every built-in preset id, derived from `themes` so it can't drift from it. */
+export type KairoPresetId = (typeof themes)[number]['id'];
 
 export type ThemeMode = 'light' | 'dark';
 
@@ -37,8 +55,13 @@ export type ThemeMode = 'light' | 'dark';
  * `document.documentElement`. Passing `"default"` (or any falsy id) removes
  * the attribute, since the default preset is expressed as bare `:root`/
  * `.dark` selectors in `css/tokens.css`.
+ *
+ * Accepts `KairoPresetId | (string & {})` rather than closing the type to
+ * the built-ins: custom presets declared by a consumer's own CSS still work
+ * at the type level, but `setPreset('bleu')` is caught as a typo against the
+ * built-in ids via autocomplete.
  */
-export function setPreset(id: string): void {
+export function setPreset(id: KairoPresetId | (string & {})): void {
   if (typeof document === 'undefined') return;
 
   const root = document.documentElement;
@@ -62,7 +85,7 @@ export function setMode(mode: ThemeMode): void {
 /**
  * Convenience wrapper that applies a preset and/or mode in one call.
  */
-export function setTheme(opts: { preset?: string; mode?: ThemeMode }): void {
+export function setTheme(opts: { preset?: KairoPresetId | (string & {}); mode?: ThemeMode }): void {
   if (typeof document === 'undefined') return;
 
   if (opts.preset !== undefined) setPreset(opts.preset);
