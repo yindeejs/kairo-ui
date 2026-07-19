@@ -19,6 +19,8 @@ export interface HomeCopy {
     toggleTheme: string;
     toggleLocale: string;
     togglePreset: string;
+    toggleSidebar: string;
+    showSidebar: string;
   };
 
   /** Opening block of the scrolling pane. */
@@ -93,6 +95,8 @@ export const HOME_COPY: Record<Locale, HomeCopy> = {
       toggleTheme: 'Toggle light/dark mode',
       toggleLocale: 'Switch language',
       togglePreset: 'Choose theme preset',
+      toggleSidebar: 'Toggle navigation menu',
+      showSidebar: 'Show sidebar navigation',
     },
 
     overviewLabel: 'Overview',
@@ -190,6 +194,8 @@ export const HOME_COPY: Record<Locale, HomeCopy> = {
       toggleTheme: 'สลับโหมดสว่าง/มืด',
       toggleLocale: 'เปลี่ยนภาษา',
       togglePreset: 'เลือกชุดสีธีม',
+      toggleSidebar: 'สลับเมนูนำทาง',
+      showSidebar: 'แสดงเมนูนำทางด้านข้าง',
     },
 
     overviewLabel: 'ภาพรวม',

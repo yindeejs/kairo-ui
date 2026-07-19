@@ -97,6 +97,19 @@ html {
  * Two linear gradients: one column of verticals, one of horizontals, each a
  * single-pixel stop repeated by `background-size`.
  *
+ * Anchored to the pane's own top-left corner (rather than `center`) so the
+ * first row and column land flush with the pane's edges instead of being cut
+ * at whatever offset centring happens to produce.
+ *
+ * The cell is fluid rather than a fixed size, so it keeps reading as the same
+ * drafting grid instead of a fixed-size pattern that looks coarser or finer
+ * as the viewport (and with it, the pane, which is ~50vw on desktop and
+ * ~100vw stacked below `lg`) changes. Both axes share one `clamp()` so the
+ * cell stays square; 6vw lands near 115px on a 1920px desktop (clamped down
+ * to the 96px ceiling) and near 36px on a 600px phone (clamped up to the 64px
+ * floor), which is the range that still reads as a grid rather than noise or
+ * a handful of stray lines.
+ *
  * The line colour is mixed from `--kairo-foreground`, so it inverts with the
  * mode on its own: a hair of black on the light background, a hair of white on
  * the dark one. 7% reads a touch stronger than the 3.5% the filled version
@@ -105,12 +118,13 @@ html {
  */
 .kairo-hero-grid {
   --kairo-hero-grid-line: color-mix(in oklab, var(--kairo-foreground) 7%, transparent);
+  --kairo-hero-grid-cell: clamp(64px, 6vw, 96px);
 
   background-image:
     linear-gradient(to right, var(--kairo-hero-grid-line) 1px, transparent 1px),
     linear-gradient(to bottom, var(--kairo-hero-grid-line) 1px, transparent 1px);
-  background-position: center;
-  background-size: 72px 72px;
+  background-position: 0 0;
+  background-size: var(--kairo-hero-grid-cell) var(--kairo-hero-grid-cell);
 }
 
 /*

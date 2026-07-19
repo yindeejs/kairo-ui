@@ -21,8 +21,8 @@ import { localeFromPathname } from '@/lib/i18n';
  * as the same bar as the landing page's `HomeNav`.
  *
  * Installed via `slots={{ header: DocsHeader }}` — the slot hands us the
- * layout's props, and two things from the original MUST be carried over or the
- * shell breaks:
+ * layout's props, and three things from the original MUST be carried over or
+ * the shell breaks:
  *
  *   - `layout:[--fd-header-height:--spacing(14)]` — the grid computes every row
  *     offset (`--fd-docs-row-2/3`, the sidebar and TOC heights) from this
@@ -31,6 +31,13 @@ import { localeFromPathname } from '@/lib/i18n';
  *   - `slots.sidebar.trigger` — below `md` the sidebar is `hidden`, and this is
  *     the only control that opens it. Without it the docs have no navigation
  *     at all on a phone.
+ *   - `slots.sidebar.collapseTrigger` — at `md`+ the sidebar can be collapsed
+ *     away (via its own header's collapse button, rendered inside
+ *     `<SidebarBanner>`/the sidebar itself), and this is the only control
+ *     that restores it. Fumadocs' stock notebook header
+ *     (`fumadocs-ui/layouts/notebook/slots/header.tsx`) renders exactly this
+ *     component, hidden via `data-[collapsed=false]:hidden`, for the same
+ *     reason — without it a collapsed sidebar is gone until reload.
  *
  * The locale is read from the pathname rather than passed in: a slot is typed
  * as `FC<ComponentProps<'header'>>`, so there is nowhere to thread an extra
@@ -76,10 +83,26 @@ export function DocsHeader(props: ComponentProps<'header'>) {
       {slots.sidebar ? (
         <slots.sidebar.trigger
           className="flex items-center border-e border-fd-border px-4 text-fd-muted-foreground transition-colors hover:text-fd-foreground md:hidden"
-          aria-label={copy.nav.overview}
+          aria-label={copy.nav.toggleSidebar}
         >
           <PanelLeft className="size-4" aria-hidden />
         </slots.sidebar.trigger>
+      ) : null}
+
+      {/* Restore-collapsed-sidebar toggle. `slots.sidebar.collapseTrigger` is
+          the same component the sidebar's own header uses to collapse it —
+          reading/writing the same `collapsed` state via `useSidebar()` — so
+          the two stay in sync. `max-md:hidden` keeps it out of the mobile
+          layout (which uses `open`, not `collapsed`), and
+          `data-[collapsed=false]:hidden` keeps it out of sight whenever the
+          sidebar is already visible, exactly like the stock notebook header. */}
+      {slots.sidebar ? (
+        <slots.sidebar.collapseTrigger
+          className="flex items-center border-e border-fd-border px-4 text-fd-muted-foreground transition-colors hover:text-fd-foreground max-md:hidden data-[collapsed=false]:hidden"
+          aria-label={copy.nav.showSidebar}
+        >
+          <PanelLeft className="size-4" aria-hidden />
+        </slots.sidebar.collapseTrigger>
       ) : null}
 
       {/* `min-w-0` again, one level down: the tabs are `whitespace-nowrap`, so
