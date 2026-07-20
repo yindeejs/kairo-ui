@@ -32,7 +32,7 @@ export function HomeNav({ locale }: { locale: Locale }) {
 
   const links = [
     { label: copy.nav.docs, to: `${prefix}/docs` },
-    { label: copy.nav.components, to: `${prefix}/docs/components/button` },
+    { label: copy.nav.components, to: `${prefix}/docs/components` },
     { label: copy.nav.theming, to: `${prefix}/docs/theming` },
   ];
 

@@ -138,7 +138,7 @@ export function HomePage({ locale }: { locale: Locale }) {
               {copy.ctaPrimary}
             </Link>
             <Link
-              {...docsLink(locale, 'components/button')}
+              {...docsLink(locale, 'components')}
               className="kairo-btn"
               data-variant="outline"
               data-size="lg"
