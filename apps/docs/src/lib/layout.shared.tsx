@@ -20,7 +20,7 @@ function navLinks(locale: Locale): NonNullable<BaseLayoutProps['links']> {
     { text: locale === 'th' ? 'เอกสาร' : 'Docs', url: `${prefix}/docs` },
     {
       text: locale === 'th' ? 'คอมโพเนนต์' : 'Components',
-      url: `${prefix}/docs/components/button`,
+      url: `${prefix}/docs/components`,
     },
   ];
 }

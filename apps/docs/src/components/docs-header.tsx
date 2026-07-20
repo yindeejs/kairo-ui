@@ -55,8 +55,8 @@ export function DocsHeader(props: ComponentProps<'header'>) {
     { label: copy.nav.docs, to: `${prefix}/docs`, match: (p: string) => !p.includes('/docs/') },
     {
       label: copy.nav.components,
-      to: `${prefix}/docs/components/button`,
-      match: (p: string) => p.includes('/docs/components/'),
+      to: `${prefix}/docs/components`,
+      match: (p: string) => p.includes('/docs/components'),
     },
     {
       label: copy.nav.theming,
