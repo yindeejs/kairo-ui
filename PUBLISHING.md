@@ -81,11 +81,27 @@ after publishing.
 
 Use this for ongoing releases once the repo is on GitHub.
 
-1. **Add the `NPM_TOKEN` repo secret**: npm → Access Tokens → Generate New
-   Token (**Automation** type, publish access) → GitHub repo → Settings →
-   Secrets and variables → Actions → New repository secret → name it
-   `NPM_TOKEN`. The Automation type matters, not just "a token that works" —
-   see the 2FA note under Option A for why.
+> **Heads-up on npm auth (checked July 2026).** npm has been phasing out
+> long-lived *classic* tokens (the old "Automation" type among them) in favour
+> of two things: **granular access tokens** and **trusted publishing** (OIDC —
+> tokenless auth straight from GitHub Actions, with provenance generated
+> automatically). If a plain "Automation token" is no longer offered or is
+> rejected, generate a **granular access token** scoped to publish `@kairo-ui/*`
+> instead — everything else below is unchanged, it still lands in the same
+> `NPM_TOKEN` secret. Trusted publishing is the better long-term setup but it
+> wants the package to already exist (you configure it against a published
+> package on npmjs.com), so it's the path to switch to *after* the first
+> release, not for `0.1.0`. `release.yml` already requests `id-token: write`
+> and both packages set `publishConfig.provenance`, so this first token-based
+> publish still gets a provenance attestation.
+
+1. **Add the `NPM_TOKEN` repo secret**: npm → Access Tokens → generate a token
+   with **publish** access to `@kairo-ui/*` (a **granular access token**, or an
+   **Automation** token if your account still offers one — see the heads-up
+   above) → GitHub repo → Settings → Secrets and variables → Actions → New
+   repository secret → name it `NPM_TOKEN`. A token that is exempt from the
+   interactive OTP prompt is what lets the workflow publish unattended — see
+   the 2FA note under Option A for why.
 2. **Enable "Allow GitHub Actions to create and approve pull requests"**:
    GitHub repo → Settings → Actions → General → Workflow permissions. This
    was off, which made every run of `release.yml` fail with `GitHub Actions
