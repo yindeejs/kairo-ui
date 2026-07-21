@@ -7,9 +7,16 @@ on:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
+# `id-token: write` lets the publish step mint a short-lived OIDC token so
+# npm can attach a provenance attestation (linking each published tarball to
+# this repo + workflow run). Auth still uses NPM_TOKEN below — provenance and
+# registry auth are independent; the OIDC token signs the attestation, the
+# npm token authenticates the upload. `contents`/`pull-requests: write` remain
+# for the changesets action to open the Version Packages PR and cut releases.
 permissions:
   contents: write
   pull-requests: write
+  id-token: write
 
 jobs:
   release:

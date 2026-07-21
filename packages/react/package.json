@@ -4,6 +4,9 @@
   "description": "React components for Kairo.",
   "type": "module",
   "license": "MIT",
+  "publishConfig": {
+    "provenance": true
+  },
   "author": "Kairo Contributors",
   "homepage": "https://github.com/yindeejs/kairo-ui#readme",
   "repository": {
